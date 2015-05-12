@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+{% block html %}
+    <head>
+        {% block head %}
+            <meta charset="UTF-8" />
+        {% endblock head %}
+        <title>{% block title %}{% endblock title %}</title>
+        {% block head_javascript %}
+        {% endblock head_javascript %}
+        {% block head_stylesheet %}
+        {% endblock head_stylesheet %}
+    </head>
+    <body>
+    {% block body %}
+    {% endblock body %}
+    {% block body_javascript %}
+    {% endblock body_javascript %}
+    </body>
+{% endblock html %}
+</html>
