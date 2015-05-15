@@ -1,1 +1,6 @@
 services:
+    ddr.twig.bootstrap.pagination_extension:
+        class: Dontdrinkandroot\DontdrinkandrootBundle\Twig\BootstrapPaginationExtension
+        arguments: ["@router"]
+        tags:
+            - { name: twig.extension }
