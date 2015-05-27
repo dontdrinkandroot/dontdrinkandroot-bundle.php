@@ -1,5 +1,5 @@
 {
-    "name": "dontdrinkandroot/dontdrinkandroot-bundle",
+    "name": "dontdrinkandroot/utils-bundle",
     "type": "symfony-bundle",
     "license": "Apache-2.0",
     "authors": [
@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Dontdrinkandroot\\DontdrinkandrootBundle\\": ""
+            "Dontdrinkandroot\\UtilsBundle\\": ""
         }
     },
     "extra": {

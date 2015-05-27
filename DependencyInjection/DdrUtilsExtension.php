@@ -1,13 +1,13 @@
 <?php
 
-namespace Dontdrinkandroot\DontdrinkandrootBundle\DependencyInjection;
+namespace Dontdrinkandroot\UtilsBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
-class DdrDontdrinkandrootExtension extends Extension
+class DdrUtilsExtension extends Extension
 {
     /**
      * {@inheritdoc}

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Dontdrinkandroot\DontdrinkandrootBundle\Twig;
+namespace Dontdrinkandroot\UtilsBundle\Twig;
 
 use Dontdrinkandroot\Pagination\Pagination;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
