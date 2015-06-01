@@ -1,0 +1,8 @@
+Dontdrinkandroot\UtilsBundle\Entity\AutoIntegerIdEntity:
+    type: mappedSuperclass
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
