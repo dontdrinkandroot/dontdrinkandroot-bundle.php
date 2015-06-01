@@ -1,5 +1,7 @@
 {% extends 'DdrUtilsBundle::bootstrap.html.twig' %}
 
+{% set brand_url = '#' %}
+
 {% block body %}
     {{ parent() }}
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -12,7 +14,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">{% block brand %}{% endblock brand %}</a>
+                <a class="navbar-brand" href="{{ brand_url }}">{% block brand %}{% endblock brand %}</a>
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
