@@ -4,3 +4,8 @@ services:
         arguments: ["@router"]
         tags:
             - { name: twig.extension }
+
+    ddr_utils.form.type.flexdate:
+        class: Dontdrinkandroot\UtilsBundle\Form\FlexDateFormType
+        tags:
+            - { name: form.type, alias: flexdate}

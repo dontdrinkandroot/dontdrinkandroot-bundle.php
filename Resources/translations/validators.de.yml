@@ -1,0 +1,5 @@
+ddr_utils:
+    flexdate:
+        yearnotset: Das Jahr ist nicht gesetzt
+        monthnotset: Der Monat ist nicht gesetzt
+        dateinvalid: Das angegebene Datum existiert nicht

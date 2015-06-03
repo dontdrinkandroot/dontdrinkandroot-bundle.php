@@ -1,0 +1,23 @@
+Dontdrinkandroot\Date\FlexDate:
+    constraints:
+        - Expression:
+            expression: "this.getMonth() === null || this.getYear() !== null"
+            message: "ddr_utils.flexdate.yearnotset"
+        - Expression:
+            expression: "this.getDay() === null || this.getMonth() !== null"
+            message: "ddr_utils.flexdate.monthnotset"
+        - Expression:
+            expression: "this.getDay() === null || this.isValidDate()"
+            message: "ddr_utils.flexdate.dateinvalid"
+    properties:
+        year:
+        month:
+            - Range:
+                min: 1
+                max: 12
+
+        day:
+            - Range:
+                min: 1
+                max: 31
+
