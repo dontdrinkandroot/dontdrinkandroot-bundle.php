@@ -1,0 +1,5 @@
+ddr:
+    utils:
+        year: Jahr
+        month: Monat
+        day: Tag

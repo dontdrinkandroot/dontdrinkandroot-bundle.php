@@ -15,25 +15,34 @@ class FlexDateFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('year', 'integer', ['label' => false, 'required' => false, 'attr' => ['class' => 'year']])
+            ->add(
+                'year',
+                'integer',
+                ['label'    => false,
+                 'required' => false,
+                 'attr'     => ['class' => 'year', 'placeholder' => 'ddr.utils.year']
+                ]
+            )
             ->add(
                 'month',
                 'choice',
                 [
-                    'label'    => false,
-                    'required' => false,
-                    'choices'  => $this->getMonthChoices(),
-                    'attr'     => ['class' => 'month']
+                    'label'       => false,
+                    'required'    => false,
+                    'choices'     => $this->getMonthChoices(),
+                    'placeholder' => 'ddr.utils.month',
+                    'attr'        => ['class' => 'month']
                 ]
             )
             ->add(
                 'day',
                 'choice',
                 [
-                    'label'    => false,
-                    'required' => false,
-                    'choices'  => $this->getDayChoices(),
-                    'attr'     => ['class' => 'day']
+                    'label'       => false,
+                    'required'    => false,
+                    'choices'     => $this->getDayChoices(),
+                    'placeholder' => 'ddr.utils.day',
+                    'attr'        => ['class' => 'day']
                 ]
             );
     }
