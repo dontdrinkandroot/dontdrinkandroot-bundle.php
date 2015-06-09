@@ -3,9 +3,10 @@
 
 namespace Dontdrinkandroot\UtilsBundle\Entity;
 
+use Dontdrinkandroot\Entity\AbstractEntity;
 use Dontdrinkandroot\Entity\EntityInterface;
 
-class AutoIntegerIdEntity implements EntityInterface
+class AutoIntegerIdEntity extends AbstractEntity implements EntityInterface
 {
 
     /**
