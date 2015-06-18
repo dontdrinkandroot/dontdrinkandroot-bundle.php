@@ -34,7 +34,9 @@
 
                     <input class="btn btn-primary" type="submit" id="_submit" name="_submit"
                            value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
-                    <a href="{{ path('fos_user_resetting_request') }}" class="btn btn-link">Passwort vergessen?</a>
+                    {% if showResetLink is defined and showResetLink %}
+                        <a href="{{ path('fos_user_resetting_request') }}" class="btn btn-link">Passwort vergessen?</a>
+                    {% endif %}
                 </form>
             </div>
         </div>
