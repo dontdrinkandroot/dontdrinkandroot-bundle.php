@@ -36,6 +36,8 @@ class BootstrapPaginationExtension extends \Twig_Extension
 
     /**
      * @param Pagination $pagination
+     * @param string     $route
+     * @param array      $params
      *
      * @return string
      */
@@ -99,8 +101,13 @@ class BootstrapPaginationExtension extends \Twig_Extension
     public function renderLink($page, $text, $route, $params, $cssClasses = array())
     {
         $params['page'] = $page;
+        $path = '#';
+        if (!in_array('disabled', $cssClasses)) {
+            $path = $this->getPath($route, $params);
+        }
+
         $html = '<li class="' . implode(' ', $cssClasses) . '">';
-        $html .= '<a href="' . $this->getPath($route, $params) . '">' . $text . '</a>';
+        $html .= '<a href="' . $path . '">' . $text . '</a>';
         $html .= '</li>' . "\n";
 
         return $html;
