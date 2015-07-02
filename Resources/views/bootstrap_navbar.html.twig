@@ -17,18 +17,26 @@
                 <a class="navbar-brand" href="{{ brand_url }}">{% block brand %}{% endblock brand %}</a>
             </div>
 
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav">
-                    {% block navbar_left %}
-                    {% endblock navbar_left %}
-                </ul>
-                {% block navbar_form %}
-                {% endblock navbar_form %}
-                <ul class="nav navbar-nav navbar-right">
-                    {% block navbar_right %}
-                    {% endblock navbar_right %}
-                </ul>
-            </div>
+            {% block navbar_collapse %}
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    {% block navbar_collapse_content %}
+                        {% block navbar_left %}
+                            <ul class="nav navbar-nav">
+                                {% block navbar_left_content %}
+                                {% endblock navbar_left_content %}
+                            </ul>
+                        {% endblock navbar_left %}
+                        {% block navbar_form %}
+                        {% endblock navbar_form %}
+                        {% block navbar_right %}
+                            <ul class="nav navbar-nav navbar-right">
+                                {% block navbar_right_content %}
+                                {% endblock navbar_right_content %}
+                            </ul>
+                        {% endblock navbar_right %}
+                    {% endblock navbar_collapse_content %}
+                </div>
+            {% endblock navbar_collapse %}
         </div>
     </nav>
 {% endblock body %}
