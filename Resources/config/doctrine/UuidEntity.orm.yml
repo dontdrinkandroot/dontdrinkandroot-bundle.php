@@ -4,3 +4,4 @@ Dontdrinkandroot\UtilsBundle\Entity\UuidEntity:
         uuid:
             type: guid
             nullable: false
+            unique: true
