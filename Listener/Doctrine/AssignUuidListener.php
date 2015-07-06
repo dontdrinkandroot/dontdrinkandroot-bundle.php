@@ -6,6 +6,7 @@ namespace Dontdrinkandroot\UtilsBundle\Listener\Doctrine;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
+use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class AssignUuidListener
 {
@@ -30,15 +31,25 @@ class AssignUuidListener
      */
     private function generateUuid(EntityManager $entityManager)
     {
-        $connection = $entityManager->getConnection();
-        $platform = $connection->getDatabasePlatform();
-        if (is_a($platform, 'Doctrine\DBAL\Platforms\MySqlPlatform')) {
-            $statement = $connection->executeQuery('SELECT UUID()');
-            $uuid = $statement->fetchColumn(0);
+//        $connection = $entityManager->getConnection();
+//        $platform = $connection->getDatabasePlatform();
+//        if (is_a($platform, 'Doctrine\DBAL\Platforms\MySqlPlatform')) {
+//            $statement = $connection->executeQuery('SELECT UUID()');
+//            $uuid = $statement->fetchColumn(0);
+//
+//            return $uuid;
+//        }
 
-            return $uuid;
-        }
+        $secureRandom = new SecureRandom();
 
-        return null;
+        return sprintf(
+            '%s-%s-%04x-%04x-%s',
+            bin2hex($secureRandom->nextBytes(4)),
+            bin2hex($secureRandom->nextBytes(2)),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+
+            bin2hex($secureRandom->nextBytes(6))
+        );
     }
 }
