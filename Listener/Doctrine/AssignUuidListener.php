@@ -3,16 +3,15 @@
 
 namespace Dontdrinkandroot\UtilsBundle\Listener\Doctrine;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
+use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class AssignUuidListener
 {
     public function prePersist(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        $entityManager = $args->getEntityManager();
 
         if (is_a($entity, 'Dontdrinkandroot\Entity\UuidEntityInterface')) {
             /** @var UuidEntityInterface $uuidEntity */
@@ -24,14 +23,14 @@ class AssignUuidListener
     }
 
     /**
-     * Not part of the public API.
+     * Not part of the public api.
      *
      * @return string
      */
-    private function generateUuid()
+    public static function generateUuid()
     {
         $secureRandom = new SecureRandom();
-        
+
         return sprintf(
             '%s-%s-%04x-%04x-%s',
             bin2hex($secureRandom->nextBytes(4)),
