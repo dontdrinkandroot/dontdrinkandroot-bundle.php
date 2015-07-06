@@ -9,3 +9,8 @@ services:
         class: Dontdrinkandroot\UtilsBundle\Form\FlexDateFormType
         tags:
             - { name: form.type, alias: flexdate}
+
+    ddr_utils.listener.doctrine.uuid:
+        class: Dontdrinkandroot\UtilsBundle\Listener\Doctrine\AssignUuidListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
