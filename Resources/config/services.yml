@@ -1,3 +1,6 @@
+parameters:
+    ddr_utils.listener.doctrine.uuid.strategy: 'random'
+
 services:
     ddr_utils.twig.bootstrap.pagination_extension:
         class: Dontdrinkandroot\UtilsBundle\Twig\BootstrapPaginationExtension
@@ -12,5 +15,7 @@ services:
 
     ddr_utils.listener.doctrine.uuid:
         class: Dontdrinkandroot\UtilsBundle\Listener\Doctrine\AssignUuidListener
+        calls:
+            - ['setStrategy', [%ddr_utils.listener.doctrine.uuid.strategy%]]
         tags:
             - { name: doctrine.event_listener, event: prePersist }
