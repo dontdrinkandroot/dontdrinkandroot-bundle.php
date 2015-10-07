@@ -1,3 +1,6 @@
 security:
     login:
-        forgot_password: Forgot Password?
+        forgot_password: Passwort vergessen
+profile:
+    title: Profil
+    edit: Profil bearbeiten
