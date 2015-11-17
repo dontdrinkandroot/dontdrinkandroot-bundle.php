@@ -3,6 +3,7 @@
 
 namespace Dontdrinkandroot\UtilsBundle\Form;
 
+use Dontdrinkandroot\Date\FlexDate;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -62,7 +63,7 @@ class FlexDateFormType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Dontdrinkandroot\Date\FlexDate',
+                'data_class' => FlexDate::class,
                 'attr'       => ['class' => 'flexdate']
             ]
         );

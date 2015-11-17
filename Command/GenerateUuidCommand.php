@@ -4,7 +4,7 @@
 namespace Dontdrinkandroot\UtilsBundle\Command;
 
 use Doctrine\ORM\EntityManager;
-use Dontdrinkandroot\UtilsBundle\Listener\Doctrine\AssignUuidListener;
+use Dontdrinkandroot\UtilsBundle\Listener\Doctrine\UuidEntityListener;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,7 +21,7 @@ class GenerateUuidCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var AssignUuidListener $uuidListener */
+        /** @var UuidEntityListener $uuidListener */
         $uuidListener = $this->getContainer()->get('ddr_utils.listener.doctrine.uuid');
         $strategy = $uuidListener->getStrategy();
         if ($input->getOption('strategy')) {

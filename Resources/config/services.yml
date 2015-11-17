@@ -14,8 +14,18 @@ services:
             - { name: form.type, alias: flexdate}
 
     ddr_utils.listener.doctrine.uuid:
-        class: Dontdrinkandroot\UtilsBundle\Listener\Doctrine\AssignUuidListener
+        class: Dontdrinkandroot\UtilsBundle\Listener\Doctrine\UuidEntityListener
         calls:
             - ['setStrategy', [%ddr_utils.listener.doctrine.uuid.strategy%]]
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    ddr_utils.listener.doctrine.created:
+        class: Dontdrinkandroot\UtilsBundle\Listener\Doctrine\CreatedEntityListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    ddr_utils.listener.doctrine.updated:
+        class: Dontdrinkandroot\UtilsBundle\Listener\Doctrine\UpdatedEntityListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }

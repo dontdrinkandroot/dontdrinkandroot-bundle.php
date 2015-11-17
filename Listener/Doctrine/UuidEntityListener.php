@@ -8,7 +8,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
 use Symfony\Component\Security\Core\Util\SecureRandom;
 
-class AssignUuidListener
+class UuidEntityListener
 {
 
     const STRATEGY_DATABASE = 'database';

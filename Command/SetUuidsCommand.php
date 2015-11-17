@@ -5,7 +5,8 @@ namespace Dontdrinkandroot\UtilsBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
-use Dontdrinkandroot\UtilsBundle\Listener\Doctrine\AssignUuidListener;
+use Dontdrinkandroot\Repository\OrmEntityRepository;
+use Dontdrinkandroot\UtilsBundle\Listener\Doctrine\UuidEntityListener;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +25,7 @@ class SetUuidsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var AssignUuidListener $uuidListener */
+        /** @var UuidEntityListener $uuidListener */
         $uuidListener = $this->getContainer()->get('ddr_utils.listener.doctrine.uuid');
         $strategy = $uuidListener->getStrategy();
         if ($input->getOption('strategy')) {
@@ -35,10 +36,11 @@ class SetUuidsCommand extends ContainerAwareCommand
         $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $entityName = $input->getArgument('entity');
+        /** @var OrmEntityRepository $repository */
         $repository = $this->getContainer()->get('doctrine')->getRepository($entityName);
         $entities = $repository->findAll();
         foreach ($entities as $entity) {
-            if (is_a($entity, 'Dontdrinkandroot\Entity\UuidEntityInterface')) {
+            if (is_a($entity, UuidEntityInterface::class)) {
                 /** @var UuidEntityInterface $uuidEntity */
                 $uuidEntity = $entity;
                 if (null === $uuidEntity->getUuid()) {
