@@ -21,11 +21,12 @@ class AssignUuidListener
     {
         $entity = $args->getEntity();
 
-        if (is_a($entity, 'Dontdrinkandroot\Entity\UuidEntityInterface')) {
+        if (is_a($entity, UuidEntityInterface::class)) {
             /** @var UuidEntityInterface $uuidEntity */
             $uuidEntity = $entity;
             if (null === $uuidEntity->getUuid()) {
-                $uuidEntity->setUuid($this->generateUuid($args->getEntityManager(), $this->strategy));
+                $uuid = $this->generateUuid($args->getEntityManager(), $this->strategy);
+                $uuidEntity->setUuid($uuid);
             }
         }
     }
