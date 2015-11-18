@@ -259,7 +259,7 @@ abstract class AbstractEntityController extends Controller
      */
     protected function getRepository()
     {
-        return $this->getDoctrine()->getRepository($this->getEntityName());
+        return $this->getDoctrine()->getRepository($this->getEntityClass());
     }
 
     /**
@@ -295,5 +295,5 @@ abstract class AbstractEntityController extends Controller
     /**
      * @return string
      */
-    protected abstract function getEntityName();
+    protected abstract function getEntityClass();
 }
