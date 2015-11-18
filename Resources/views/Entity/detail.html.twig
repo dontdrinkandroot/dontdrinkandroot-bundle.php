@@ -1,0 +1,20 @@
+{% extends 'DdrUtilsBundle:Entity:base.html.twig' %}
+{% block entity_content %}
+    <div class="page-header">
+        <div class="pull-right">
+            <a class="btn btn-default action edit" href="{{ path(routes.edit,{'id':entity.id}) }}">
+                <i class="fa fa-pencil"></i>
+            </a>
+            <a class="btn btn-default action delete" href="{{ path(routes.delete,{'id':entity.id}) }}">
+                <i class="fa fa-trash-o"></i>
+            </a>
+        </div>
+        <h1>{{ entity.id }}</h1>
+    </div>
+    <dl class="dl-horizontal">
+        {% for field,displayName in fields %}
+            <dt>{{ displayName }}</dt>
+            <dd>{{ attribute(entity, field) }}</dd>
+        {% endfor %}
+    </dl>
+{% endblock entity_content %}
