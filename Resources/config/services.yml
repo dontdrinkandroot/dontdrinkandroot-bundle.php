@@ -29,3 +29,11 @@ services:
         class: Dontdrinkandroot\UtilsBundle\Listener\Doctrine\UpdatedEntityListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+
+
+    ddr_utils.routing.entity_loader:
+        class: Dontdrinkandroot\UtilsBundle\Routing\EntityLoader
+        arguments:
+            - '@kernel'
+        tags:
+            - { name: routing.loader }

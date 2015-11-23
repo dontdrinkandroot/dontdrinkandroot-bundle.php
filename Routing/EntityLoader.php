@@ -1,0 +1,115 @@
+<?php
+
+
+namespace Dontdrinkandroot\UtilsBundle\Routing;
+
+use Dontdrinkandroot\UtilsBundle\Controller\EntityControllerInterface;
+use Symfony\Component\Config\Loader\Loader;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
+
+class EntityLoader extends Loader
+{
+
+    private $loaded = false;
+
+    /**
+     * @var KernelInterface
+     */
+    private $kernel;
+
+    public function __construct(KernelInterface $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function load($resource, $type = null)
+    {
+        if (true === $this->loaded) {
+            throw new \RuntimeException('Do not add the "ddr_entity" loader twice');
+        }
+
+        $parts = explode(':', $resource);
+        if (2 !== count($parts)) {
+            throw new \Exception('Can not process resource string');
+        }
+
+        $bundle = $parts[0];
+        $controllerName = $parts[1];
+
+        try {
+            $allBundles = $this->kernel->getBundle($bundle, false);
+        } catch (\InvalidArgumentException $e) {
+            throw new \Exception(sprintf('Bundle "%s" not found', $bundle));
+        }
+
+        $candidates = [];
+        foreach ($allBundles as $b) {
+            $candidate = $b->getNamespace() . '\\Controller\\' . $controllerName . 'Controller';
+            if (class_exists($candidate)) {
+                $candidates[] = $candidate;
+            }
+
+            $matchingBundles[] = $b->getName();
+        }
+
+        if (0 === count($candidates)) {
+            throw new \Exception('Controller not found');
+        }
+
+        if (count($candidates) > 1) {
+            throw new \Exception('More than one matching candidate found');
+        }
+
+        $controllerClass = $candidates[0];
+        $reflectionClass = new \ReflectionClass($controllerClass);
+        if (!$reflectionClass->implementsInterface(EntityControllerInterface::class)) {
+            throw new \Exception('Controller must implement ' . EntityControllerInterface::class);
+        }
+
+        $routePrefix = $this->getRoutePrefix($bundle, $controllerName);
+        $baseUrl = strtolower($controllerName);
+
+        $routes = new RouteCollection();
+
+        $routes->add(
+            $routePrefix . '.edit',
+            new Route('/' . $baseUrl . '/{id}/edit', ['_controller' => $resource . ':edit'])
+        );
+        $routes->add(
+            $routePrefix . '.delete',
+            new Route('/' . $baseUrl . '/{id}/delete', ['_controller' => $resource . ':delete'])
+        );
+        $routes->add(
+            $routePrefix . '.detail',
+            new Route('/' . $baseUrl . '/{id}', ['_controller' => $resource . ':detail'])
+        );
+        $routes->add($routePrefix . '.list', new Route('/' . $baseUrl . '/', ['_controller' => $resource . ':list']));
+
+        $this->loaded = true;
+
+        return $routes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($resource, $type = null)
+    {
+        return 'ddr_entity' === $type;
+    }
+
+    private function getRoutePrefix($bundle, $controllerName)
+    {
+        $prefix = str_replace('Bundle', '', $bundle);
+        $prefix = $prefix . '.' . $controllerName;
+        $prefix = str_replace('\\', '.', $prefix);
+        $prefix = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $prefix));
+
+        return $prefix;
+    }
+}
