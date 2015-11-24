@@ -13,6 +13,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 abstract class AbstractEntityController extends Controller implements EntityControllerInterface
 {
 
+    private $routePrefix = null;
+
+    private $viewPrefix = null;
+
+    private $pathPrefix = null;
+
     /**
      * @param Request $request
      *
@@ -54,6 +60,63 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     public function deleteAction(Request $request, $id)
     {
         return $this->createDeleteResponse($request, $id);
+    }
+
+    /**
+     * @param string|null $routePrefix
+     */
+    public function setRoutePrefix($routePrefix)
+    {
+        $this->routePrefix = $routePrefix;
+    }
+
+    /**
+     * @param string|null $viewPrefix
+     */
+    public function setViewPrefix($viewPrefix)
+    {
+        $this->viewPrefix = $viewPrefix;
+    }
+
+    /**
+     * @param string|null $pathPrefix
+     */
+    public function setPathPrefix($pathPrefix)
+    {
+        $this->pathPrefix = $pathPrefix;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoutePrefix()
+    {
+        if (null !== $this->routePrefix) {
+            return $this->routePrefix;
+        }
+
+        list($bundle, $entityName) = $this->extractBundleAndEntityName($this->getEntityClass());
+
+        $prefix = str_replace('Bundle', '', $bundle);
+        $prefix = $prefix . '.' . $entityName;
+        $prefix = str_replace('\\', '.', $prefix);
+        $prefix = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $prefix));
+
+        return $prefix;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPathPrefix()
+    {
+        if (null !== $this->pathPrefix) {
+            return $this->pathPrefix;
+        }
+
+        list($bundle, $entityName) = $this->extractBundleAndEntityName($this->getEntityClass());
+
+        return '/' . strtolower($entityName) . '/';
     }
 
     /**
@@ -247,10 +310,13 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     }
 
     /**
-     * @string
+     * @return string
      */
     protected function getViewPrefix()
     {
+        if (null !== $this->viewPrefix) {
+            return $this->viewPrefix;
+        }
         return 'DdrUtilsBundle:Entity';
     }
 
@@ -282,15 +348,23 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         ];
     }
 
+    protected function extractBundleAndEntityName($entityClass)
+    {
+        $entityClass = $this->getEntityClass();
+        $parts = explode(':', $entityClass);
+        if (2 !== count($parts)) {
+            throw new \Exception(sprintf('Expecting entity class to be "Bundle:Entity", %s given', $entityClass));
+        }
+
+        return $parts;
+    }
+
     /**
      * @return FormTypeInterface
      */
     protected abstract function getFormType();
 
-    /**
-     * @return string
-     */
-    protected abstract function getRoutePrefix();
+
 
     /**
      * @return string

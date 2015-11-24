@@ -66,29 +66,33 @@ class EntityLoader extends Loader
         }
 
         $controllerClass = $candidates[0];
+
         $reflectionClass = new \ReflectionClass($controllerClass);
         if (!$reflectionClass->implementsInterface(EntityControllerInterface::class)) {
             throw new \Exception('Controller must implement ' . EntityControllerInterface::class);
         }
 
-        $routePrefix = $this->getRoutePrefix($bundle, $controllerName);
-        $baseUrl = strtolower($controllerName);
+        /** @var EntityControllerInterface $controller */
+        $controller = new $controllerClass;
+
+        $routePrefix = $controller->getRoutePrefix();
+        $pathPrefix = $controller->getPathPrefix();
 
         $routes = new RouteCollection();
 
         $routes->add(
             $routePrefix . '.edit',
-            new Route('/' . $baseUrl . '/{id}/edit', ['_controller' => $resource . ':edit'])
+            new Route($pathPrefix . '{id}/edit', ['_controller' => $resource . ':edit'])
         );
         $routes->add(
             $routePrefix . '.delete',
-            new Route('/' . $baseUrl . '/{id}/delete', ['_controller' => $resource . ':delete'])
+            new Route($pathPrefix . '{id}/delete', ['_controller' => $resource . ':delete'])
         );
         $routes->add(
             $routePrefix . '.detail',
-            new Route('/' . $baseUrl . '/{id}', ['_controller' => $resource . ':detail'])
+            new Route($pathPrefix . '{id}', ['_controller' => $resource . ':detail'])
         );
-        $routes->add($routePrefix . '.list', new Route('/' . $baseUrl . '/', ['_controller' => $resource . ':list']));
+        $routes->add($routePrefix . '.list', new Route($pathPrefix, ['_controller' => $resource . ':list']));
 
         $this->loaded = true;
 
@@ -101,15 +105,5 @@ class EntityLoader extends Loader
     public function supports($resource, $type = null)
     {
         return 'ddr_entity' === $type;
-    }
-
-    private function getRoutePrefix($bundle, $controllerName)
-    {
-        $prefix = str_replace('Bundle', '', $bundle);
-        $prefix = $prefix . '.' . $controllerName;
-        $prefix = str_replace('\\', '.', $prefix);
-        $prefix = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $prefix));
-
-        return $prefix;
     }
 }

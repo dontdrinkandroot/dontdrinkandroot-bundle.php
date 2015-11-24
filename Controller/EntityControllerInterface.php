@@ -36,4 +36,14 @@ interface EntityControllerInterface
      * @return Response
      */
     public function deleteAction(Request $request, $id);
+
+    /**
+     * @return string
+     */
+    public function getRoutePrefix();
+
+    /**
+     * @return string
+     */
+    public function getPathPrefix();
 }
