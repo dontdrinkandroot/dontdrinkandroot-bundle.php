@@ -13,7 +13,7 @@
         "php": ">=5.5",
         "symfony/framework-bundle": "~2.6",
         "twig/twig": "~1",
-        "dontdrinkandroot/utils": "0.3.x-dev"
+        "dontdrinkandroot/utils": "0.4.x-dev"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.1"
