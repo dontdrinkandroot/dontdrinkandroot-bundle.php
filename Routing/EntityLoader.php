@@ -12,8 +12,6 @@ use Symfony\Component\Routing\RouteCollection;
 class EntityLoader extends Loader
 {
 
-    private $loaded = false;
-
     /**
      * @var KernelInterface
      */
@@ -29,10 +27,6 @@ class EntityLoader extends Loader
      */
     public function load($resource, $type = null)
     {
-        if (true === $this->loaded) {
-            throw new \RuntimeException(sprintf('Do not add the "%s" loader twice', $this->getType()));
-        }
-
         $parts = explode(':', $resource);
         if (2 !== count($parts)) {
             throw new \Exception('Can not process resource string');
@@ -76,8 +70,6 @@ class EntityLoader extends Loader
         $controller = new $controllerClass;
 
         $routes = $this->createRouteCollection($controller, $resource);
-
-        $this->loaded = true;
 
         return $routes;
     }
