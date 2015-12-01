@@ -13,11 +13,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 abstract class AbstractEntityController extends Controller implements EntityControllerInterface
 {
 
-    private $routePrefix = null;
+    protected $routePrefix = null;
 
-    private $viewPrefix = null;
+    protected $viewPrefix = null;
 
-    private $pathPrefix = null;
+    protected $pathPrefix = null;
 
     /**
      * {@inheritdoc}

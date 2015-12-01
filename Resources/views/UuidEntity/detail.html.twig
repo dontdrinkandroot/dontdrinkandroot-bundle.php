@@ -2,14 +2,14 @@
 {% block entity_content %}
     <div class="page-header">
         <div class="pull-right">
-            <a class="btn btn-default action edit" href="{{ path(routes.edit,{'id':entity.id}) }}">
+            <a class="btn btn-default action edit" href="{{ path(routes.edit,{'id':entity.uuid}) }}">
                 <i class="fa fa-pencil"></i>
             </a>
-            <a class="btn btn-default action delete" href="{{ path(routes.delete,{'id':entity.id}) }}">
+            <a class="btn btn-default action delete" href="{{ path(routes.delete,{'id':entity.uuid}) }}">
                 <i class="fa fa-trash-o"></i>
             </a>
         </div>
-        <h1>{{ entity.id }}</h1>
+        <h1>{{ entity.uuid }}</h1>
     </div>
     <dl class="dl-horizontal">
         {% for field,displayName in fields %}

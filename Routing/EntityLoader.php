@@ -30,7 +30,7 @@ class EntityLoader extends Loader
     public function load($resource, $type = null)
     {
         if (true === $this->loaded) {
-            throw new \RuntimeException('Do not add the "ddr_entity" loader twice');
+            throw new \RuntimeException(sprintf('Do not add the "%s" loader twice', $this->getType()));
         }
 
         $parts = explode(':', $resource);
@@ -68,8 +68,8 @@ class EntityLoader extends Loader
         $controllerClass = $candidates[0];
 
         $reflectionClass = new \ReflectionClass($controllerClass);
-        if (!$reflectionClass->implementsInterface(EntityControllerInterface::class)) {
-            throw new \Exception('Controller must implement ' . EntityControllerInterface::class);
+        if (!$reflectionClass->implementsInterface($this->getControllerClass())) {
+            throw new \Exception('Controller must implement ' . $this->getControllerClass());
         }
 
         /** @var EntityControllerInterface $controller */
@@ -104,6 +104,22 @@ class EntityLoader extends Loader
      */
     public function supports($resource, $type = null)
     {
-        return 'ddr_entity' === $type;
+        return $this->getType() === $type;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getType()
+    {
+        return 'ddr_entity';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getControllerClass()
+    {
+        return EntityControllerInterface::class;
     }
 }

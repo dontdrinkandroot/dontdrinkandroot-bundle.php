@@ -29,13 +29,13 @@
                     <td class="{{ field }}">{{ attribute(entity,field) }}</td>
                 {% endfor %}
                 <td class="actions">
-                    <a href="{{ path(routes.detail,{'id':entity.id}) }}" class="btn btn-default btn-xs action detail">
+                    <a href="{{ path(routes.detail,{'id':entity.uuid}) }}" class="btn btn-default btn-xs action detail">
                         <i class="fa fa-search"></i>
                     </a>
-                    <a href="{{ path(routes.edit,{'id':entity.id}) }}" class="btn btn-default btn-xs action edit">
+                    <a href="{{ path(routes.edit,{'id':entity.uuid}) }}" class="btn btn-default btn-xs action edit">
                         <i class="fa fa-pencil"></i>
                     </a>
-                    <a href="{{ path(routes.delete,{'id':entity.id}) }}" class="btn btn-default btn-xs action delete">
+                    <a href="{{ path(routes.delete,{'id':entity.uuid}) }}" class="btn btn-default btn-xs action delete">
                         <i class="fa fa-trash-o"></i>
                     </a>
                 </td>

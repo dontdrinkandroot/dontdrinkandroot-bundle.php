@@ -31,7 +31,6 @@ services:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
 
-
     ddr_utils.routing.entity_loader:
         class: Dontdrinkandroot\UtilsBundle\Routing\EntityLoader
         arguments:
