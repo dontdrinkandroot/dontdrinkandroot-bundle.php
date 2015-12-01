@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\UtilsBundle\Controller;
 
 use Dontdrinkandroot\Entity\EntityInterface;
+use Dontdrinkandroot\Entity\UpdatedEntityInterface;
 use Dontdrinkandroot\Repository\OrmEntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormTypeInterface;
@@ -41,10 +42,24 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         $user = $this->getUser();
         $this->checkDetailActionAuthorization($user);
 
-        $view = $this->getDetailView();
-        $model = $this->getDetailModel($request, $id);
+        $entity = $this->fetchEntity($id);
 
-        return $this->render($view, $model);
+        $response = new Response();
+        $lastModified = $this->getLastModified($entity);
+        if (null !== $lastModified) {
+
+            $response->setLastModified($lastModified);
+            $response->setPublic();
+
+            if ($response->isNotModified($request)) {
+                return $response;
+            }
+        }
+
+        $model = $this->getDetailModel($request, $entity);
+        $view = $this->getDetailView();
+
+        return $this->render($view, $model, $response);
     }
 
     /**
@@ -190,14 +205,12 @@ abstract class AbstractEntityController extends Controller implements EntityCont
 
     /**
      * @param Request $request
-     * @param int     $id
+     * @param EntityInterface     $entity
      *
      * @return array
      */
-    protected function getDetailModel(Request $request, $id)
+    protected function getDetailModel(Request $request, EntityInterface $entity)
     {
-        $entity = $this->fetchEntity($id);
-
         return [
             'entity' => $entity,
             'routes' => $this->getRoutes(),
@@ -346,19 +359,35 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         return $this->redirectToRoute($this->getListRoute());
     }
 
+    /**
+     * @param EntityInterface $entity
+     *
+     * @return \DateTime|null
+     */
+    protected function getLastModified(EntityInterface $entity)
+    {
+        if (is_a($entity, UpdatedEntityInterface::class)) {
+            /** @var UpdatedEntityInterface $updatedEntity */
+            $updatedEntity = $entity;
+            return $updatedEntity->getUpdated();
+        }
+
+        return null;
+    }
+
     protected function checkListActionAuthorization($user)
     {
     }
 
-    private function checkDetailActionAuthorization($user)
+    protected function checkDetailActionAuthorization($user)
     {
     }
 
-    private function checkEditActionAuthorization($user)
+    protected function checkEditActionAuthorization($user)
     {
     }
 
-    private function checkDeleteActionAuthorization($user)
+    protected function checkDeleteActionAuthorization($user)
     {
     }
 
@@ -371,4 +400,6 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      * @return string
      */
     protected abstract function getEntityClass();
+
+
 }
