@@ -3,6 +3,7 @@
 
 namespace Dontdrinkandroot\UtilsBundle\Controller;
 
+use Dontdrinkandroot\Entity\EntityInterface;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -38,8 +39,11 @@ abstract class AbstractUuidEntityController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function createPostEditResponse(Request $request, UuidEntityInterface $entity)
+    protected function createPostEditResponse(Request $request, EntityInterface $entity)
     {
-        return $this->redirectToRoute($this->getDetailRoute(), ['id' => $entity->getUuid()]);
+        /** @var UuidEntityInterface $uuidEntity */
+        $uuidEntity = $entity;
+
+        return $this->redirectToRoute($this->getDetailRoute(), ['id' => $uuidEntity->getUuid()]);
     }
 }

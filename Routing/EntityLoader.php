@@ -75,24 +75,7 @@ class EntityLoader extends Loader
         /** @var EntityControllerInterface $controller */
         $controller = new $controllerClass;
 
-        $routePrefix = $controller->getRoutePrefix();
-        $pathPrefix = $controller->getPathPrefix();
-
-        $routes = new RouteCollection();
-
-        $routes->add(
-            $routePrefix . '.edit',
-            new Route($pathPrefix . '{id}/edit', ['_controller' => $resource . ':edit'])
-        );
-        $routes->add(
-            $routePrefix . '.delete',
-            new Route($pathPrefix . '{id}/delete', ['_controller' => $resource . ':delete'])
-        );
-        $routes->add(
-            $routePrefix . '.detail',
-            new Route($pathPrefix . '{id}', ['_controller' => $resource . ':detail'])
-        );
-        $routes->add($routePrefix . '.list', new Route($pathPrefix, ['_controller' => $resource . ':list']));
+        $routes = $this->createRouteCollection($controller, $resource);
 
         $this->loaded = true;
 
@@ -121,5 +104,35 @@ class EntityLoader extends Loader
     protected function getControllerClass()
     {
         return EntityControllerInterface::class;
+    }
+
+    /**
+     * @param EntityControllerInterface $controller
+     * @param                           $resource
+     *
+     * @return RouteCollection
+     */
+    protected function createRouteCollection(EntityControllerInterface $controller, $resource)
+    {
+        $routePrefix = $controller->getRoutePrefix();
+        $pathPrefix = $controller->getPathPrefix();
+
+        $routes = new RouteCollection();
+
+        $routes->add(
+            $routePrefix . '.edit',
+            new Route($pathPrefix . '{id}/edit', ['_controller' => $resource . ':edit'])
+        );
+        $routes->add(
+            $routePrefix . '.delete',
+            new Route($pathPrefix . '{id}/delete', ['_controller' => $resource . ':delete'])
+        );
+        $routes->add(
+            $routePrefix . '.detail',
+            new Route($pathPrefix . '{id}', ['_controller' => $resource . ':detail'])
+        );
+        $routes->add($routePrefix . '.list', new Route($pathPrefix, ['_controller' => $resource . ':list']));
+
+        return $routes;
     }
 }
