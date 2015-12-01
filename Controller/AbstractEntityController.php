@@ -20,70 +20,79 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     private $pathPrefix = null;
 
     /**
-     * @param Request $request
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function listAction(Request $request)
     {
-        return $this->createListResponse($request);
+        $user = $this->getUser();
+        $this->checkListActionAuthorization($user);
+
+        $view = $this->getListView();
+        $model = $this->getListModel($request);
+
+        return $this->render($view, $model);
     }
 
     /**
-     * @param Request $request
-     * @param int     $id
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function detailAction(Request $request, $id)
     {
-        return $this->createDetailResponse($request, $id);
+        $user = $this->getUser();
+        $this->checkDetailActionAuthorization($user);
+
+        $view = $this->getDetailView();
+        $model = $this->getDetailModel($request, $id);
+
+        return $this->render($view, $model);
     }
 
     /**
-     * @param Request         $request
-     * @param int|null|string $id
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function editAction(Request $request, $id = null)
     {
-        return $this->createdEditResponse($request, $id);
+        $user = $this->getUser();
+        $this->checkEditActionAuthorization($user);
+
+        $new = true;
+        $entity = null;
+        if (null !== $id && $id !== 'new') {
+            $new = false;
+            $entity = $this->fetchEntity($id);
+        }
+        $form = $this->createForm($this->getFormType(), $entity);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            /** @var EntityInterface $entity */
+            $entity = $form->getData();
+            if ($new) {
+                $entity = $this->getRepository()->persist($entity);
+            } else {
+                $this->getRepository()->flush($entity);
+            }
+
+            return $this->createPostEditResponse($request, $entity);
+        }
+
+        $view = $this->getEditView();
+
+        return $this->render($view, ['entity' => $entity, 'form' => $form->createView()]);
     }
 
     /**
-     * @param Request $request
-     * @param int     $id
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function deleteAction(Request $request, $id)
     {
-        return $this->createDeleteResponse($request, $id);
-    }
+        $user = $this->getUser();
+        $this->checkDeleteActionAuthorization($user);
 
-    /**
-     * @param string|null $routePrefix
-     */
-    public function setRoutePrefix($routePrefix)
-    {
-        $this->routePrefix = $routePrefix;
-    }
+        $entity = $this->fetchEntity($id);
+        $this->getRepository()->remove($entity);
 
-    /**
-     * @param string|null $viewPrefix
-     */
-    public function setViewPrefix($viewPrefix)
-    {
-        $this->viewPrefix = $viewPrefix;
-    }
-
-    /**
-     * @param string|null $pathPrefix
-     */
-    public function setPathPrefix($pathPrefix)
-    {
-        $this->pathPrefix = $pathPrefix;
+        return $this->createPostDeleteResponse($request, $entity);
     }
 
     /**
@@ -120,16 +129,27 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     }
 
     /**
-     * @param Request $request
-     *
-     * @return Response
+     * @param string|null $routePrefix
      */
-    protected function createListResponse(Request $request)
+    public function setRoutePrefix($routePrefix)
     {
-        $view = $this->getListView();
-        $model = $this->getListModel($request);
+        $this->routePrefix = $routePrefix;
+    }
 
-        return $this->render($view, $model);
+    /**
+     * @param string|null $viewPrefix
+     */
+    public function setViewPrefix($viewPrefix)
+    {
+        $this->viewPrefix = $viewPrefix;
+    }
+
+    /**
+     * @param string|null $pathPrefix
+     */
+    public function setPathPrefix($pathPrefix)
+    {
+        $this->pathPrefix = $pathPrefix;
     }
 
     /**
@@ -161,20 +181,6 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     }
 
     /**
-     * @param Request $request
-     * @param int     $id
-     *
-     * @return Response
-     */
-    protected function createDetailResponse(Request $request, $id)
-    {
-        $view = $this->getDetailView();
-        $model = $this->getDetailModel($request, $id);
-
-        return $this->render($view, $model);
-    }
-
-    /**
      * @return string
      */
     protected function getDetailView()
@@ -200,34 +206,6 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     }
 
     /**
-     * @param Request  $request
-     * @param int|null $id
-     *
-     * @return Response
-     */
-    protected function createdEditResponse(Request $request, $id = null)
-    {
-        $view = $this->getEditView();
-
-        $entity = null;
-        if (null !== $id && $id !== 'new') {
-            $entity = $this->fetchEntity($id);
-        }
-        $form = $this->createForm($this->getFormType(), $entity);
-
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            /** @var EntityInterface $entity */
-            $entity = $form->getData();
-            $entity = $this->getRepository()->save($entity);
-
-            return $this->redirectToRoute($this->getDetailRoute(), ['id' => $entity->getId()]);
-        }
-
-        return $this->render($view, ['entity' => $entity, 'form' => $form->createView()]);
-    }
-
-    /**
      * @return string
      */
     protected function getEditView()
@@ -236,21 +214,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     }
 
     /**
-     * @param Request $request
-     * @param         $id
-     *
-     * @return Response
-     */
-    protected function createDeleteResponse(Request $request, $id)
-    {
-        $entity = $this->fetchEntity($id);
-        $this->getRepository()->remove($entity);
-
-        return $this->redirectToRoute($this->getListRoute());
-    }
-
-    /**
-     * @param $id
+     * @param mixed $id
      *
      * @return EntityInterface
      */
@@ -317,6 +281,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         if (null !== $this->viewPrefix) {
             return $this->viewPrefix;
         }
+
         return 'DdrUtilsBundle:Entity';
     }
 
@@ -360,11 +325,47 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     }
 
     /**
+     * @param Request         $request
+     * @param EntityInterface $entity
+     *
+     * @return Response
+     */
+    protected function createPostEditResponse(Request $request, EntityInterface $entity)
+    {
+        return $this->redirectToRoute($this->getDetailRoute(), ['id' => $entity->getId()]);
+    }
+
+    /**
+     * @param Request         $request
+     * @param EntityInterface $entity
+     *
+     * @return Response
+     */
+    protected function createPostDeleteResponse(Request $request, EntityInterface $entity)
+    {
+        return $this->redirectToRoute($this->getListRoute());
+    }
+
+    protected function checkListActionAuthorization($user)
+    {
+    }
+
+    private function checkDetailActionAuthorization($user)
+    {
+    }
+
+    private function checkEditActionAuthorization($user)
+    {
+    }
+
+    private function checkDeleteActionAuthorization($user)
+    {
+    }
+
+    /**
      * @return FormTypeInterface
      */
     protected abstract function getFormType();
-
-
 
     /**
      * @return string

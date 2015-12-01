@@ -15,7 +15,7 @@ interface EntityControllerInterface
 
     /**
      * @param Request $request
-     * @param int     $id
+     * @param mixed   $id
      *
      * @return Response
      */
@@ -23,7 +23,7 @@ interface EntityControllerInterface
 
     /**
      * @param Request         $request
-     * @param int|null|string $id
+     * @param mixed|null|string $id
      *
      * @return Response
      */
@@ -31,7 +31,7 @@ interface EntityControllerInterface
 
     /**
      * @param Request $request
-     * @param int     $id
+     * @param mixed   $id
      *
      * @return Response
      */

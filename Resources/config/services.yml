@@ -29,6 +29,7 @@ services:
         class: Dontdrinkandroot\UtilsBundle\Listener\Doctrine\UpdatedEntityListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
 
 
     ddr_utils.routing.entity_loader:
