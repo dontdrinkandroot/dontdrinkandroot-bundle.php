@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\UtilsBundle\Controller;
 use Dontdrinkandroot\Entity\EntityInterface;
 use Dontdrinkandroot\Entity\UpdatedEntityInterface;
 use Dontdrinkandroot\Repository\OrmEntityRepository;
+use Dontdrinkandroot\Utils\StringUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -119,7 +120,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
             return $this->routePrefix;
         }
 
-        list($bundle, $entityName) = $this->extractBundleAndEntityName($this->getEntityClass());
+        list($bundle, $entityName) = $this->extractBundleAndEntityName();
 
         $prefix = str_replace('Bundle', '', $bundle);
         $prefix = $prefix . '.' . $entityName;
@@ -138,7 +139,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
             return $this->pathPrefix;
         }
 
-        list($bundle, $entityName) = $this->extractBundleAndEntityName($this->getEntityClass());
+        list($bundle, $entityName) = $this->extractBundleAndEntityName();
 
         return '/' . strtolower($entityName) . '/';
     }
@@ -326,12 +327,12 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         ];
     }
 
-    protected function extractBundleAndEntityName($entityClass)
+    protected function extractBundleAndEntityName()
     {
-        $entityClass = $this->getEntityClass();
-        $parts = explode(':', $entityClass);
+        $shortName = $this->getEntityShortName();
+        $parts = explode(':', $shortName);
         if (2 !== count($parts)) {
-            throw new \Exception(sprintf('Expecting entity class to be "Bundle:Entity", %s given', $entityClass));
+            throw new \Exception(sprintf('Expecting entity class to be "Bundle:Entity", %s given', $shortName));
         }
 
         return $parts;
@@ -395,6 +396,33 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      * @return FormTypeInterface
      */
     protected abstract function getFormType();
+
+    /**
+     * @return string
+     */
+    protected function getEntityShortName()
+    {
+        $entityClass = $this->getEntityClass();
+        $entityClassParts = explode('\\', $entityClass);
+
+        $bundle = $this->findBundle($entityClassParts);
+        $className = $entityClassParts[count($entityClassParts) - 1];
+
+        $shortName = $bundle . ':' . $className;
+
+        return $shortName;
+    }
+
+    private function findBundle(array $entityClassParts)
+    {
+        foreach ($entityClassParts as $part) {
+            if (StringUtils::endsWith($part, 'Bundle')) {
+                return $part;
+            }
+        }
+
+        throw new \RuntimeException('No Bundle found in namespace');
+    }
 
     /**
      * @return string
