@@ -2,6 +2,7 @@ parameters:
     ddr_utils.listener.doctrine.uuid.strategy: 'random'
 
 services:
+
     ddr_utils.twig.bootstrap.pagination_extension:
         class: Dontdrinkandroot\UtilsBundle\Twig\BootstrapPaginationExtension
         arguments: ["@router"]

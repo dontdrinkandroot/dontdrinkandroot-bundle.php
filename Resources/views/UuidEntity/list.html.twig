@@ -10,7 +10,7 @@
     </div>
 
     <div class="pull-right">
-        {{ pagination(pagination, app.request.attributes.get('_route'), app.request.query.all) }}
+        {{ ddr_pagination(pagination, app.request) }}
     </div>
 
     <table class="table">

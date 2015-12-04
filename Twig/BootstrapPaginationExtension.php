@@ -4,6 +4,7 @@
 namespace Dontdrinkandroot\UtilsBundle\Twig;
 
 use Dontdrinkandroot\Pagination\Pagination;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class BootstrapPaginationExtension extends \Twig_Extension
@@ -18,31 +19,31 @@ class BootstrapPaginationExtension extends \Twig_Extension
 
     public function getName()
     {
-        return "ddr_bootstrap_pagination";
+        return 'ddr_bootstrap_pagination';
     }
 
     public function getFunctions()
     {
         return array(
-            'pagination' => new \Twig_SimpleFunction(
-                'pagination',
-                array($this, 'generatePagination'),
-                array(
-                    'is_safe' => array('html')
-                )
+            'ddr_pagination' => new \Twig_SimpleFunction(
+                'ddr_pagination',
+                [$this, 'generatePagination'],
+                ['is_safe' => ['html']]
             )
         );
     }
 
     /**
      * @param Pagination $pagination
-     * @param string     $route
-     * @param array      $params
+     * @param Request    $request
      *
      * @return string
      */
-    public function generatePagination($pagination, $route, $params)
+    public function generatePagination($pagination, Request $request)
     {
+        $route = $request->attributes->get('_route');
+        $params = $request->query->all();
+
         $html = '<ul class="pagination">' . "\n";
 
         /* Render prev page */
