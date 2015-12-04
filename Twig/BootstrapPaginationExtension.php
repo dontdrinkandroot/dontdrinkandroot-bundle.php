@@ -50,7 +50,7 @@ class BootstrapPaginationExtension extends \Twig_Extension
         if ($pagination->getCurrentPage() == 1) {
             $cssClasses[] = 'disabled';
         }
-        $html .= $this->renderLink($pagination->getCurrentPage() - 1, '&laquo;', $route, $params, $cssClasses);
+        $html .= $this->renderLink($pagination->getCurrentPage() - 1, '&laquo;', $route, $params, $cssClasses, 'prev');
 
         $surroundingStartIdx = max(1, $pagination->getCurrentPage() - 2);
         $surroundingEndIdx = min($pagination->getTotalPages(), $pagination->getCurrentPage() + 2);
@@ -91,14 +91,14 @@ class BootstrapPaginationExtension extends \Twig_Extension
         if ($pagination->getCurrentPage() >= $pagination->getTotalPages()) {
             $cssClasses[] = 'disabled';
         }
-        $html .= $this->renderLink($pagination->getCurrentPage() + 1, '&raquo;', $route, $params, $cssClasses);
+        $html .= $this->renderLink($pagination->getCurrentPage() + 1, '&raquo;', $route, $params, $cssClasses, 'next');
 
         $html .= '</ul>' . "\n";
 
         return $html;
     }
 
-    public function renderLink($page, $text, $route, $params, $cssClasses = array())
+    public function renderLink($page, $text, $route, $params, $cssClasses = array(), $rel = null)
     {
         $params['page'] = $page;
         $path = '#';
@@ -107,7 +107,11 @@ class BootstrapPaginationExtension extends \Twig_Extension
         }
 
         $html = '<li class="' . implode(' ', $cssClasses) . '">';
-        $html .= '<a href="' . $path . '">' . $text . '</a>';
+        $html .= '<a href="' . $path . '"';
+        if (null !== $rel) {
+            $html .= ' rel="' . $rel . '"';
+        }
+        $html .= '>' . $text . '</a>';
         $html .= '</li>' . "\n";
 
         return $html;
