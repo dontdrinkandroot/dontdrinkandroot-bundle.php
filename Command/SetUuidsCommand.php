@@ -46,7 +46,7 @@ class SetUuidsCommand extends ContainerAwareCommand
                 if (null === $uuidEntity->getUuid()) {
                     $uuidEntity->setUuid($uuidListener->generateUuid($entityManager, $strategy));
                 }
-                $repository->save($entity);
+                $repository->flush($entity);
             }
         }
     }
