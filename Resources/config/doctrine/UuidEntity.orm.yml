@@ -1,9 +1,5 @@
 Dontdrinkandroot\UtilsBundle\Entity\UuidEntity:
     type: mappedSuperclass
-    indexes:
-        uuidIdx:
-            columns:
-                - uuid
     fields:
         uuid:
             type: guid
