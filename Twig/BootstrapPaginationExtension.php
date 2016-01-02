@@ -42,7 +42,7 @@ class BootstrapPaginationExtension extends \Twig_Extension
     public function generatePagination($pagination, Request $request)
     {
         $route = $request->attributes->get('_route');
-        $params = $request->query->all();
+        $params = array_merge($request->attributes->get('_route_params'), $request->query->all());
 
         $html = '<ul class="pagination">' . "\n";
 
