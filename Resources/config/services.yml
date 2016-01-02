@@ -38,3 +38,8 @@ services:
             - '@kernel'
         tags:
             - { name: routing.loader }
+
+    ddr_utils.transaction_manager:
+        class: Dontdrinkandroot\Repository\TransactionManager
+        arguments:
+            - '@doctrine.orm.entity_manager'
