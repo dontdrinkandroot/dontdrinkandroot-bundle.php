@@ -1,0 +1,2 @@
+#!/bin/sh
+rm web/IN_MAINTENANCE_MODE

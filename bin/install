@@ -1,0 +1,4 @@
+#!/bin/sh
+composer install --optimize-autoloader && \
+bin/console --env=prod assetic:dump && \
+bin/maintenance.off

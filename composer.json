@@ -27,6 +27,13 @@
     "suggest": {
         "doctrine/data-fixtures": "For data fixture testing"
     },
+    "bin": [
+        "bin/install",
+        "bin/update",
+        "bin/maintenance.off",
+        "bin/maintenance.on",
+        "bin/set-permissions"
+    ],
     "extra": {
         "branch-alias": {
             "dev-master": "0.2.x-dev"
