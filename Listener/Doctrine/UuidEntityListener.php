@@ -7,7 +7,6 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class UuidEntityListener
 {
@@ -57,14 +56,14 @@ class UuidEntityListener
      */
     public function generateRandomUuid()
     {
-        $secureRandom = new SecureRandom();
+        //TODO: Refactor into own class
         return sprintf(
             '%s-%s-%04x-%04x-%s',
-            bin2hex($secureRandom->nextBytes(4)),
-            bin2hex($secureRandom->nextBytes(2)),
+            bin2hex(random_bytes(4)),
+            bin2hex(random_bytes(2)),
             mt_rand(0, 0x0fff) | 0x4000,
             mt_rand(0, 0x3fff) | 0x8000,
-            bin2hex($secureRandom->nextBytes(6))
+            bin2hex(random_bytes(6))
         );
     }
 
