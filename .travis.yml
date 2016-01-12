@@ -8,6 +8,4 @@ before_script:
   - composer install
 
 script:
-  ./vendor/phpunit/phpunit/phpunit -c ./ --testsuite "Unit Tests"
-  ./vendor/phpunit/phpunit/phpunit -c ./ --testsuite "Integration Tests"
-  ./vendor/phpunit/phpunit/phpunit -c ./ --testsuite "Acceptance Tests"
+  ./vendor/phpunit/phpunit/phpunit -c ./ --testsuite "Unit Tests" && ./vendor/phpunit/phpunit/phpunit -c ./ --testsuite "Integration Tests" && ./vendor/phpunit/phpunit/phpunit -c ./ --testsuite "Acceptance Tests"
