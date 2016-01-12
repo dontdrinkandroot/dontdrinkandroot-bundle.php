@@ -3,6 +3,7 @@
 
 namespace Dontdrinkandroot\UtilsBundle\Listener\Doctrine;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
@@ -57,7 +58,6 @@ class UuidEntityListener
     public function generateRandomUuid()
     {
         $secureRandom = new SecureRandom();
-
         return sprintf(
             '%s-%s-%04x-%04x-%s',
             bin2hex($secureRandom->nextBytes(4)),
@@ -72,7 +72,7 @@ class UuidEntityListener
      * @param EntityManager $entityManager
      *
      * @return bool|string
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     protected function generateDatabaseUuid(EntityManager $entityManager)
     {

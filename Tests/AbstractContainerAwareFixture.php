@@ -1,14 +1,11 @@
 <?php
 
-namespace Dontdrinkandroot\UtilsBundle\Test;
+namespace Dontdrinkandroot\UtilsBundle\Tests;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * @deprecated
- */
 abstract class AbstractContainerAwareFixture extends AbstractFixture
     implements ContainerAwareInterface
 {

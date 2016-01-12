@@ -1,11 +1,8 @@
 <?php
 
 
-namespace Dontdrinkandroot\UtilsBundle\Test;
+namespace Dontdrinkandroot\UtilsBundle\Tests;
 
-/**
- * @deprecated
- */
 trait ReferenceTrait
 {
 
