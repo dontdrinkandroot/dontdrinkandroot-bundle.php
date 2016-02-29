@@ -25,7 +25,8 @@
         }
     },
     "suggest": {
-        "doctrine/data-fixtures": "For data fixture testing"
+        "doctrine/data-fixtures": "For data fixture testing",
+        "graphp/graphviz": "For rendering Entity Relationship diagrams"
     },
     "bin": [
         "bin/install",
