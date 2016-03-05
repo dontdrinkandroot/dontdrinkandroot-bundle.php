@@ -1,0 +1,94 @@
+#!/bin/bash
+
+setAcl () {
+    sudo setfacl -Rn -m u:www-data:rwX -m u:`whoami`:rwX $1
+    sudo setfacl -dRn -m u:www-data:rwX -m u:`whoami`:rwX $1
+    sudo chown -R :www-data $1
+    sudo chmod -R g+w $1
+    sudo chmod g+ws $1
+    sudo setfacl -dR -m g::rwX $1
+}
+
+function maintenanceOn() {
+    echo "Maintenance ON"
+    touch web/IN_MAINTENANCE_MODE
+}
+
+function maintenanceOff() {
+    echo "Maintenance OFF"
+    rm web/IN_MAINTENANCE_MODE
+}
+
+function maintenance() {
+    case $1 in
+        "on")
+            maintenanceOn
+            ;;
+        "off")
+            maintenanceOff
+            ;;
+         *)
+            echo "Valid parameters are 'on' or 'off'"
+            ;;
+    esac
+}
+
+function setPermissions() {
+    echo "Setting Permissions"
+    sudo chown :www-data var/
+    setAcl var/logs/
+    setAcl var/cache/
+}
+
+function printUsage() {
+    echo "TODO: Show usage"
+}
+
+function update() {
+    echo "Updating"
+    maintenanceOn && \
+    git pull && \
+    composer install && \
+    bin/console assetic:dump && \
+    bin/console doctrine:cache:clear-metadata && \
+    bin/console doctrine:schema:update --dump-sql
+}
+
+function install() {
+    echo "Installing"
+    composer install --optimize-autoloader && \
+    bin/console --env=prod assetic:dump && \
+    maintenanceOff
+}
+
+if [ 0 -eq "$#" ]; then
+    printUsage
+fi
+
+while getopts uipm:h option; do
+    case $option in
+        "u")
+            update
+            ;;
+        "i")
+            install
+            ;;
+        "m")
+            maintenance $OPTARG
+            ;;
+        "h")
+            printUsage
+            ;;
+        "p")
+            setPermissions
+            ;;
+        \?)
+            printUsage
+            exit 1
+            ;;
+        :)
+            printUsage
+            exit 1
+            ;;
+    esac
+done
