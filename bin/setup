@@ -1,6 +1,6 @@
 #!/bin/bash
 
-setAcl () {
+function setAcl() {
     sudo setfacl -Rn -m u:www-data:rwX -m u:`whoami`:rwX $1
     sudo setfacl -dRn -m u:www-data:rwX -m u:`whoami`:rwX $1
     sudo chown -R :www-data $1
@@ -61,11 +61,30 @@ function install() {
     maintenanceOff
 }
 
+function runTests() {
+    bin/console --env="test" doctrine:schema:update --force
+    bin/phpcs --standard=psr2 --ignore=*.js,*.css ./src
+
+    echo ""
+    echo "=================="
+    echo "Running UNIT Tests"
+    echo "=================="
+    echo ""
+    bin/phpunit -c app/ --testsuite "Unit Tests"
+
+    echo ""
+    echo "========================="
+    echo "Running INTEGRATION Tests"
+    echo "========================="
+    echo ""
+    bin/phpunit -c app/ --testsuite "Integration Tests"
+}
+
 if [ 0 -eq "$#" ]; then
     printUsage
 fi
 
-while getopts uipm:h option; do
+while getopts uitpm:h option; do
     case $option in
         "u")
             update
@@ -81,6 +100,9 @@ while getopts uipm:h option; do
             ;;
         "p")
             setPermissions
+            ;;
+        "t")
+            runTests
             ;;
         \?)
             printUsage
