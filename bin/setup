@@ -41,7 +41,13 @@ function setPermissions() {
 }
 
 function printUsage() {
-    echo "TODO: Show usage"
+    echo "Valid Options:"
+    echo "-u: Update application from git"
+    echo "-i: Install productive"
+    echo "-t: Run tests"
+    echo "-p: Fix permissions for Apache"
+    echo "-m: Turn maintenance on or off. Parameters: 'on'|'off'"
+    echo "-h: Print this help text"
 }
 
 function update() {
