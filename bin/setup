@@ -84,6 +84,13 @@ function runTests() {
     echo "========================="
     echo ""
     bin/phpunit -c app/ --testsuite "Integration Tests"
+
+    echo ""
+    echo "========================"
+    echo "Running ACCEPTANCE Tests"
+    echo "========================"
+    echo ""
+    bin/phpunit -c app/ --testsuite "Acceptance Tests"
 }
 
 if [ 0 -eq "$#" ]; then
