@@ -36,8 +36,17 @@ function maintenance() {
 function setPermissions() {
     echo "Setting Permissions"
     sudo chown :www-data var/
+    echo "  var/logs/"
     setAcl var/logs/
+    echo "  var/cache"
     setAcl var/cache/
+
+    if [ -n "$1" ]
+      then
+        echo "  $1"
+        sudo chown :www-data $1
+        setAcl $1
+    fi
 }
 
 function printUsage() {
@@ -45,7 +54,7 @@ function printUsage() {
     echo "update:          Update application from git"
     echo "install:         Install productive"
     echo "run-tests:       Run tests"
-    echo "set-permissions: Fix permissions for Apache"
+    echo "set-permissions: Set permissions for Apache."
     echo "maintenance:     Turn maintenance on or off. Parameters: 'on'|'off'"
     echo "help:            Print this help text"
 }
@@ -111,7 +120,7 @@ case $1 in
         printUsage
         ;;
     "set-permissions")
-        setPermissions
+        setPermissions $2
         ;;
     "run-tests")
         runTests
