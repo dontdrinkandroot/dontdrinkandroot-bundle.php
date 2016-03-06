@@ -1,7 +1,0 @@
-Dontdrinkandroot\UtilsBundle\Entity\UuidEntity:
-    type: mappedSuperclass
-    fields:
-        uuid:
-            type: guid
-            nullable: false
-            unique: true
