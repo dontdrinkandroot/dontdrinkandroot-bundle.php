@@ -109,7 +109,7 @@ case $1 in
     "run-tests")
         runTests
         ;;
-    :)
+    *)
         printUsage
         exit 1
         ;;
