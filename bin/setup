@@ -42,12 +42,12 @@ function setPermissions() {
 
 function printUsage() {
     echo "Valid Options:"
-    echo "-u: Update application from git"
-    echo "-i: Install productive"
-    echo "-t: Run tests"
-    echo "-p: Fix permissions for Apache"
-    echo "-m: Turn maintenance on or off. Parameters: 'on'|'off'"
-    echo "-h: Print this help text"
+    echo "update:         Update application from git"
+    echo "install:        Install productive"
+    echo "runtests:       Run tests"
+    echo "setpermissions: Fix permissions for Apache"
+    echo "maintenance:    Turn maintenance on or off. Parameters: 'on'|'off'"
+    echo "help:           Print this help text"
 }
 
 function update() {
@@ -90,33 +90,27 @@ if [ 0 -eq "$#" ]; then
     printUsage
 fi
 
-while getopts uitpm:h option; do
-    case $option in
-        "u")
-            update
-            ;;
-        "i")
-            install
-            ;;
-        "m")
-            maintenance $OPTARG
-            ;;
-        "h")
-            printUsage
-            ;;
-        "p")
-            setPermissions
-            ;;
-        "t")
-            runTests
-            ;;
-        \?)
-            printUsage
-            exit 1
-            ;;
-        :)
-            printUsage
-            exit 1
-            ;;
-    esac
-done
+case $1 in
+    "update")
+        update
+        ;;
+    "install")
+        install
+        ;;
+    "maintenance")
+        maintenance $2
+        ;;
+    "help")
+        printUsage
+        ;;
+    "setpermissions")
+        setPermissions
+        ;;
+    "runtests")
+        runTests
+        ;;
+    :)
+        printUsage
+        exit 1
+        ;;
+esac
