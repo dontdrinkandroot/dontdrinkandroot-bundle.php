@@ -42,12 +42,12 @@ function setPermissions() {
 
 function printUsage() {
     echo "Valid Options:"
-    echo "update:         Update application from git"
-    echo "install:        Install productive"
-    echo "runtests:       Run tests"
-    echo "setpermissions: Fix permissions for Apache"
-    echo "maintenance:    Turn maintenance on or off. Parameters: 'on'|'off'"
-    echo "help:           Print this help text"
+    echo "update:          Update application from git"
+    echo "install:         Install productive"
+    echo "run-tests:       Run tests"
+    echo "set-permissions: Fix permissions for Apache"
+    echo "maintenance:     Turn maintenance on or off. Parameters: 'on'|'off'"
+    echo "help:            Print this help text"
 }
 
 function update() {
@@ -103,10 +103,10 @@ case $1 in
     "help")
         printUsage
         ;;
-    "setpermissions")
+    "set-permissions")
         setPermissions
         ;;
-    "runtests")
+    "run-tests")
         runTests
         ;;
     :)
