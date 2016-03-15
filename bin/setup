@@ -102,10 +102,6 @@ function runTests() {
     bin/phpunit -c app/ --testsuite "Acceptance Tests"
 }
 
-if [ 0 -eq "$#" ]; then
-    printUsage
-fi
-
 case $1 in
     "update")
         update
