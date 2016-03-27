@@ -71,7 +71,7 @@ function update() {
 
 function install() {
     echo "Installing"
-    composer install --optimize-autoloader && \
+    (SYMFONY_ENV="prod" composer install --optimize-autoloader) && \
     bin/console --env=prod assetic:dump && \
     maintenanceOff
 }
