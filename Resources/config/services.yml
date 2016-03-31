@@ -9,6 +9,12 @@ services:
         tags:
             - { name: twig.extension }
 
+    ddr_utils.twig.intl_extension:
+        class: Dontdrinkandroot\UtilsBundle\Twig\IntlExtension
+        arguments: ["@router"]
+        tags:
+            - { name: twig.extension }
+
     ddr_utils.form.type.flexdate:
         class: Dontdrinkandroot\UtilsBundle\Form\FlexDateFormType
         tags:

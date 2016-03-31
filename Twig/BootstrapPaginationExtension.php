@@ -17,6 +17,9 @@ class BootstrapPaginationExtension extends \Twig_Extension
         $this->generator = $generator;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'ddr_bootstrap_pagination';
@@ -126,4 +129,4 @@ class BootstrapPaginationExtension extends \Twig_Extension
             $relative ? UrlGeneratorInterface::RELATIVE_PATH : UrlGeneratorInterface::ABSOLUTE_PATH
         );
     }
-} 
+}
