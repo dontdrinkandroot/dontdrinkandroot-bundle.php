@@ -100,6 +100,13 @@ function runTests() {
     echo "========================"
     echo ""
     bin/phpunit -c app/ --testsuite "Acceptance Tests"
+
+    echo ""
+    echo "========================"
+    echo "Running SMOKE Tests"
+    echo "========================"
+    echo ""
+    bin/phpunit -c app/ --testsuite "Smoke Tests"
 }
 
 case $1 in
