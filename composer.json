@@ -11,8 +11,8 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
-        "symfony/symfony": "~2.7",
+        "php": ">=5.6",
+        "symfony/symfony": "^2.7|^3.0",
         "dontdrinkandroot/utils": "0.5.x-dev"
     },
     "require-dev": {
