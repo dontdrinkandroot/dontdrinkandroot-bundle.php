@@ -71,7 +71,13 @@ function update() {
 
 function install() {
     echo "Installing"
-    (SYMFONY_ENV="prod" composer install --optimize-autoloader) && \
+    bin/console --env=prod doctrine:cache:clear-metadata && \
+    bin/console --env=prod doctrine:cache:clear-collection-region --all && \
+    bin/console --env=prod doctrine:cache:clear-entity-region --all && \
+    bin/console --env=prod doctrine:cache:clear-query && \
+    bin/console --env=prod doctrine:cache:clear-query-region --all && \
+    bin/console --env=prod doctrine:cache:clear-result && \
+    (SYMFONY_ENV="prod" composer install --no-dev --optimize-autoloader) && \
     bin/console --env=prod assetic:dump && \
     maintenanceOff
 }
