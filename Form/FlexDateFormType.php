@@ -5,6 +5,8 @@ namespace Dontdrinkandroot\UtilsBundle\Form;
 
 use Dontdrinkandroot\Date\FlexDate;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,7 +20,7 @@ class FlexDateFormType extends AbstractType
         $builder
             ->add(
                 'year',
-                'integer',
+                IntegerType::class,
                 ['label'    => false,
                  'required' => false,
                  'attr'     => ['class' => 'year', 'placeholder' => 'ddr.utils.year']
@@ -26,7 +28,7 @@ class FlexDateFormType extends AbstractType
             )
             ->add(
                 'month',
-                'choice',
+                ChoiceType::class,
                 [
                     'label'       => false,
                     'required'    => false,
@@ -37,7 +39,7 @@ class FlexDateFormType extends AbstractType
             )
             ->add(
                 'day',
-                'choice',
+                ChoiceType::class,
                 [
                     'label'       => false,
                     'required'    => false,
