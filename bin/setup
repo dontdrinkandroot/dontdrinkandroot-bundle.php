@@ -40,6 +40,8 @@ function setPermissions() {
     setAcl var/logs/
     echo "  var/cache"
     setAcl var/cache/
+    echo "  var/sessions"
+    setAcl var/sessions/
 
     if [ -n "$1" ]
       then
