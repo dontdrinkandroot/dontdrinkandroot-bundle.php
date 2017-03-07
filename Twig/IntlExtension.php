@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\UtilsBundle\Twig;
 
 class IntlExtension extends \Twig_Extension
 {
-
     /**
      * {@inheritdoc}
      */
