@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Dontdrinkandroot\UtilsBundle\Twig;
 
 use Dontdrinkandroot\Pagination\Pagination;
@@ -9,7 +8,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class BootstrapPaginationExtension extends \Twig_Extension
 {
-
     private $generator;
 
     public function __construct(UrlGeneratorInterface $generator)
