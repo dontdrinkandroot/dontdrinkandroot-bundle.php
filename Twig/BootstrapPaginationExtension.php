@@ -5,8 +5,10 @@ namespace Dontdrinkandroot\UtilsBundle\Twig;
 use Dontdrinkandroot\Pagination\Pagination;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig_Extension;
+use Twig_SimpleFunction;
 
-class BootstrapPaginationExtension extends \Twig_Extension
+class BootstrapPaginationExtension extends Twig_Extension
 {
     private $generator;
 
@@ -26,7 +28,7 @@ class BootstrapPaginationExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'ddr_pagination' => new \Twig_SimpleFunction(
+            'ddr_pagination' => new Twig_SimpleFunction(
                 'ddr_pagination',
                 [$this, 'generatePagination'],
                 ['is_safe' => ['html']]
@@ -65,13 +67,14 @@ class BootstrapPaginationExtension extends \Twig_Extension
 
         /* Render dots */
         if ($surroundingStartIdx > 2) {
-            $html .= '<li class="disabled"><a href="#">&hellip;</a></li>' . "\n";
+            $html .= '<li class="page-item disabled"><a class="page-link" href="#">&hellip;</a></li>' . "\n";
         }
 
         /* Render surrounding pages */
         if ($pagination->getTotalPages() > 0) {
             for ($i = $surroundingStartIdx; $i <= $surroundingEndIdx; $i++) {
-                $cssClasses = array();
+                $cssClasses = [];
+                $cssClasses[] = 'page-item';
                 if ($i == $pagination->getCurrentPage()) {
                     $cssClasses[] = 'active';
                 }
@@ -81,7 +84,7 @@ class BootstrapPaginationExtension extends \Twig_Extension
 
         /* Render dots */
         if ($surroundingEndIdx < $pagination->getTotalPages() - 1) {
-            $html .= '<li class="disabled"><a href="#">&hellip;</a></li>' . "\n";
+            $html .= '<li class="page-item disabled"><a class="page-link" href="#">&hellip;</a></li>' . "\n";
         }
 
         /* Render last page */
